@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Swetrowo | Market Brief</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+    :root {
+      --bg: #0b0f1a;
+      --bg-alt: #101827;
+      --card: #111827;
+      --card-soft: rgba(17, 24, 39, 0.82);
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #f97316;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --meme: #facc15;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(250, 204, 21, 0.22), transparent 35%),
+        radial-gradient(circle at 80% 8%, rgba(56, 189, 248, 0.22), transparent 35%),
+        radial-gradient(circle at 30% 70%, rgba(249, 115, 22, 0.16), transparent 45%),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 8px, transparent 8px 16px),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: rgba(10, 15, 28, 0.8);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .forum-frame {
+      max-width: 1280px;
+      margin: 26px auto 0;
+      padding: 0 32px;
+      background: transparent;
+      border: none;
+    }
+
+    .forum-frame::after {
+      display: none;
+    }
+
+    .forum-card {
+      border: 2px solid rgba(56, 189, 248, 0.5);
+      background: linear-gradient(120deg, rgba(15, 23, 42, 0.92), rgba(30, 64, 175, 0.35));
+      border-radius: 20px;
+      padding: 18px 22px;
+      display: grid;
+      gap: 14px;
+      box-shadow: 0 16px 28px rgba(2, 6, 23, 0.6);
+    }
+
+    .forum-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .forum-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    .forum-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .forum-badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    .headline-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .headline-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .headline-date {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-right: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .headline-list li a {
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .headline-list li a:hover {
+      color: var(--accent-2);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--text);
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      border-color: rgba(249, 115, 22, 0.6);
+      background: rgba(249, 115, 22, 0.18);
+      color: var(--accent-2);
+    }
+
+    .hero {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 32px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .ticker-strip {
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      background: rgba(127, 29, 29, 0.35);
+      border-radius: 16px;
+      padding: 12px 16px;
+      overflow: hidden;
+    }
+
+    .ticker-strip .ticker-track span {
+      color: #f87171;
+    }
+
+    .chart-card {
+      border: 2px solid rgba(56, 189, 248, 0.45);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.9);
+      box-shadow: 0 16px 30px rgba(2, 6, 23, 0.55);
+    }
+
+    .table-wrap.compact {
+      max-height: 220px;
+    }
+
+    .compact-table {
+      min-width: 520px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .chart-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .chart-sub {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .legend-dot.bullish { background: var(--green); }
+    .legend-dot.bearish { background: var(--red); }
+    .legend-dot.neutral { background: var(--amber); }
+
+    #sentimentChart {
+      width: 100%;
+      height: 220px;
+      display: block;
+    }
+
+    .chart-empty {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .hero-card {
+      background: linear-gradient(120deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.28));
+      border: 2px solid rgba(56, 189, 248, 0.45);
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(3, 7, 18, 0.6);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--meme);
+      background: rgba(250, 204, 21, 0.12);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 76px);
+      line-height: 0.95;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .meme-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .meme-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--text);
+    }
+
+    .meme-tag.hot {
+      background: rgba(249, 115, 22, 0.2);
+      border-color: rgba(249, 115, 22, 0.5);
+      color: var(--accent-2);
+    }
+
+    .meta-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid rgba(56, 189, 248, 0.25);
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .meta-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .ticker-tape {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 2px dashed rgba(249, 115, 22, 0.5);
+      background: rgba(17, 24, 39, 0.8);
+      padding: 18px;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      gap: 28px;
+      white-space: nowrap;
+      animation: ticker 18s linear infinite;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ticker-track span {
+      color: var(--accent-2);
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto 80px;
+      padding: 0 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    section {
+      background: rgba(15, 23, 42, 0.88);
+      border: 2px solid rgba(148, 163, 184, 0.25);
+      border-radius: 24px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(2, 6, 23, 0.55);
+    }
+
+    section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(250, 204, 21, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    section p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 2px solid rgba(250, 204, 21, 0.18);
+      border-left: 4px solid var(--meme);
+      border-radius: 18px;
+      padding: 14px 16px;
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-card .value {
+      font-size: 22px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 420px;
+      border: 2px solid rgba(148, 163, 184, 0.22);
+      border-radius: 18px;
+      background: rgba(11, 15, 26, 0.7);
+    }
+
+    h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+      margin-top: 16px;
+      letter-spacing: 1px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.85);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    tbody tr:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1px solid transparent;
+    }
+
+    .pill.bullish { background: rgba(34, 197, 94, 0.15); color: var(--green); border-color: rgba(34, 197, 94, 0.4); }
+    .pill.bearish { background: rgba(239, 68, 68, 0.15); color: var(--red); border-color: rgba(239, 68, 68, 0.4); }
+    .pill.neutral { background: rgba(245, 158, 11, 0.15); color: var(--amber); border-color: rgba(245, 158, 11, 0.4); }
+
+    footer {
+      max-width: 1280px;
+      margin: 0 auto 40px;
+      padding: 0 32px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 960px) {
+      .nav { flex-direction: column; gap: 10px; }
+      .nav-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">Swetrowo</div>
+      <nav class="nav-links">
+        <a href="#sentiment">Sentyment</a>
+        <a href="#tech-pl">Techniczne PL</a>
+        <a href="#tech-global">Techniczne Global</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="ticker-strip reveal">
+      <div class="ticker-track"><span>11B</span> <span>DNP</span> <span>PLW</span> <span>TXT</span> <span>GPP</span> <span>AMZN</span> <span>MSFT</span> <span>CRM</span> <span>V</span> <span>UNH</span><span>11B</span> <span>DNP</span> <span>PLW</span> <span>TXT</span> <span>GPP</span> <span>AMZN</span> <span>MSFT</span> <span>CRM</span> <span>V</span> <span>UNH</span></div>
+    </div>
+    <div class="hero-card reveal">
+      <div class="badge">HODL Desk</div>
+      <h1>Swetrowo</h1>
+      <p>Feed społeczności inwestycyjnej: HODL, STONKS, FOMO i szybki przegląd sentymentu oraz technicznych filtrów.</p>
+      <div class="meme-tags">
+        <span class="meme-tag hot">HODL</span>
+        <span class="meme-tag">STONKS</span>
+        <span class="meme-tag">DIAMOND HANDS</span>
+        <span class="meme-tag hot">FOMO</span>
+        <span class="meme-tag">WIG20</span>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-card"><strong>Sentyment</strong>2026-02-09 19:22:45</div>
+        <div class="meta-card"><strong>Techniczne PL</strong>2026-02-09 13:24:40</div>
+        <div class="meta-card"><strong>Techniczne Global</strong>2026-02-09 13:29:40</div>
+      </div>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Sentiment Pulse</div>
+          <div class="chart-sub">Ostatnie raporty (BULL / BEAR / NEUTRAL)</div>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot bullish"></span>Bullish</span>
+          <span class="legend-item"><span class="legend-dot bearish"></span>Bearish</span>
+          <span class="legend-item"><span class="legend-dot neutral"></span>Neutral</span>
+        </div>
+      </div>
+      <canvas id="sentimentChart"></canvas>
+      <div class="chart-empty" id="chartEmpty">Brak danych timeline. Uruchom sentiment_timeline.py / wygeneruj nowe raporty.</div>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Combined Analysis</div>
+          <div class="chart-sub">Źródło: combined_analysis.py · combined_20260209_193633.csv</div>
+        </div>
+      </div>
+      <div class="table-wrap compact"><table class="compact-table"><thead><tr><th>Ticker</th><th>Final_Score</th><th>Attractiveness</th><th>combined_score</th><th>Sentiment_Score</th><th>Threads</th><th>last_close</th></tr></thead><tbody><tr><td>CBF</td><td>43.75</td><td>✅ BUY</td><td>37.50</td><td>50.00</td><td>2</td><td>195.40</td></tr><tr><td>11B</td><td>25.00</td><td>✅ BUY</td><td>50.00</td><td>0.00</td><td>0</td><td>134.00</td></tr><tr><td>DNP</td><td>25.00</td><td>✅ BUY</td><td>50.00</td><td>0.00</td><td>0</td><td>39.19</td></tr><tr><td>PLW</td><td>25.00</td><td>✅ BUY</td><td>50.00</td><td>0.00</td><td>0</td><td>254.00</td></tr><tr><td>TXT</td><td>18.75</td><td>⏸ HOLD</td><td>37.50</td><td>0.00</td><td>0</td><td>39.16</td></tr><tr><td>GPP</td><td>18.75</td><td>⏸ HOLD</td><td>37.50</td><td>0.00</td><td>0</td><td>43.75</td></tr><tr><td>ALE</td><td>18.75</td><td>⏸ HOLD</td><td>37.50</td><td>0.00</td><td>0</td><td>28.68</td></tr><tr><td>CDR</td><td>12.50</td><td>⏸ HOLD</td><td>25.00</td><td>0.00</td><td>0</td><td>240.00</td></tr><tr><td>ACP</td><td>12.50</td><td>⏸ HOLD</td><td>25.00</td><td>0.00</td><td>0</td><td>189.50</td></tr><tr><td>PEP</td><td>12.50</td><td>⏸ HOLD</td><td>25.00</td><td>0.00</td><td>0</td><td>53.00</td></tr><tr><td>ASE</td><td>12.50</td><td>⏸ HOLD</td><td>25.00</td><td>0.00</td><td>0</td><td>66.20</td></tr><tr><td>VRC</td><td>10.40</td><td>⏸ HOLD</td><td>-12.50</td><td>33.30</td><td>3</td><td>135.00</td></tr></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="forum-frame reveal">
+    <div class="forum-card">
+      <div class="forum-header">
+        <div>
+          <h2>Forum Pulse: świeże wątki</h2>
+          <div class="forum-meta">Źródło: Forum Giełda · Aktualizacja: 2026-02-09 19:44:47</div>
+        </div>
+        <div class="forum-badge">Forum Pulse</div>
+      </div>
+      <ul class="headline-list">
+        <li>Brak danych z forum. Odśwież raport z dostępem do internetu.</li>
+      </ul>
+    </div>
+  </section>
+
+  <main>
+    <section id="sentiment" class="reveal">
+      <h2>Sentyment: Antigrav</h2>
+      <p>Wyciąg z raportu sentimentu (okres: 5 dni, czas wykonania: 13.90s).</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">Bullish</div><div class="value">2</div></div>
+        <div class="stat-card"><div class="label">Neutral</div><div class="value">58</div></div>
+        <div class="stat-card"><div class="label">Bearish</div><div class="value">2</div></div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3>Top pozytywne</h3>
+          <div class="table-wrap"><table><thead><tr><th>company</th><th>positive_pct</th><th>threads</th><th>sentiment</th></tr></thead><tbody><tr><td>CYBERFLKS</td><td>50.0%</td><td>2</td><td>Bullish</td></tr><tr><td>VERCOM</td><td>33.3%</td><td>3</td><td>Bullish</td></tr><tr><td>PKO BP</td><td>20.0%</td><td>5</td><td>Neutral</td></tr><tr><td>JSW</td><td>15.2%</td><td>33</td><td>Neutral</td></tr><tr><td>DIAG</td><td>0.0%</td><td>8</td><td>Bearish</td></tr><tr><td>WIRTUALNA</td><td>0.0%</td><td>4</td><td>Neutral</td></tr><tr><td>PEKAO</td><td>0.0%</td><td>3</td><td>Bearish</td></tr><tr><td>GPW</td><td>0.0%</td><td>2</td><td>Neutral</td></tr><tr><td>DOMDEV</td><td>0.0%</td><td>1</td><td>Neutral</td></tr><tr><td>ENEA</td><td>0.0%</td><td>1</td><td>Neutral</td></tr></tbody></table></div>
+        </div>
+        <div>
+          <h3>Top negatywne</h3>
+          <div class="table-wrap"><table><thead><tr><th>company</th><th>negative_pct</th><th>threads</th><th>sentiment</th></tr></thead><tbody><tr><td>PEKAO</td><td>33.3%</td><td>3</td><td>Bearish</td></tr><tr><td>JSW</td><td>21.2%</td><td>33</td><td>Neutral</td></tr><tr><td>PKO BP</td><td>20.0%</td><td>5</td><td>Neutral</td></tr><tr><td>DIAG</td><td>12.5%</td><td>8</td><td>Bearish</td></tr><tr><td>WIRTUALNA</td><td>0.0%</td><td>4</td><td>Neutral</td></tr><tr><td>VERCOM</td><td>0.0%</td><td>3</td><td>Bullish</td></tr><tr><td>CYBERFLKS</td><td>0.0%</td><td>2</td><td>Bullish</td></tr><tr><td>GPW</td><td>0.0%</td><td>2</td><td>Neutral</td></tr><tr><td>DOMDEV</td><td>0.0%</td><td>1</td><td>Neutral</td></tr><tr><td>ENEA</td><td>0.0%</td><td>1</td><td>Neutral</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <h3>Pełny raport sentymentu</h3>
+        <div class="table-wrap"><table><thead><tr><th>company</th><th>threads</th><th>positive</th><th>negative</th><th>neutral</th><th>positive_pct</th><th>negative_pct</th><th>sentiment</th></tr></thead><tbody><tr><td>11 BIT STUDIOS</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ABPL</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ALIOR</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ALLEGRO</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>AMREST</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ASBIS</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ASSECO POLAND</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ASSECOSEE</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>AUTOPARTN</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>BENEFIT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>BNP PARIBAS BANK POLSKA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>BUDIMEX</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>CD PROJEKT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>CYBERFLKS</td><td>2</td><td>1</td><td>0</td><td>1</td><td>50.0%</td><td>0.0%</td><td>Bullish</td></tr><tr><td>CYFROWY POLSAT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>DEVELIA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>DIAG</td><td>8</td><td>0</td><td>1</td><td>7</td><td>0.0%</td><td>12.5%</td><td>Bearish</td></tr><tr><td>DINO</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>DOMDEV</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ENEA</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>EUROCASH</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>GPW</td><td>2</td><td>0</td><td>0</td><td>2</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>GREENX</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>GRUPA KĘTY</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>GRUPAAZOTY</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>GRUPRACUJ</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>HANDLOWY</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>HUUUGE</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ING BANK ŚLĄSKI</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>INTERCARS</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>JSW</td><td>33</td><td>5</td><td>7</td><td>21</td><td>15.2%</td><td>21.2%</td><td>Neutral</td></tr><tr><td>KGHM</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>KRUK</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>LPP</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>LUBAWA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>MBANK</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>MILLENNIUM</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>MIRBUD</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>MOBRUK</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>NEUCA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>NEWAG</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ORANGE POLSKA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PEKAO</td><td>3</td><td>0</td><td>1</td><td>2</td><td>0.0%</td><td>33.3%</td><td>Bearish</td></tr><tr><td>PEP</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PEPCO</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PGE</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PGNIG</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PKN ORLEN</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PKO BP</td><td>5</td><td>1</td><td>1</td><td>3</td><td>20.0%</td><td>20.0%</td><td>Neutral</td></tr><tr><td>PLAYWAY</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>PZU</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>RAINBOW</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>SYNEKTIK</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>TAURON</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>TEXT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>TSGAMES</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>VERCOM</td><td>3</td><td>1</td><td>0</td><td>2</td><td>33.3%</td><td>0.0%</td><td>Bullish</td></tr><tr><td>VISTULA GROUP</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>VOXEL</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>WIRTUALNA</td><td>4</td><td>0</td><td>0</td><td>4</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>XTB</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr><tr><td>ŻABKA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0%</td><td>0.0%</td><td>Neutral</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="tech-pl" class="reveal">
+      <h2>Techniczne: Polska</h2>
+      <p>Najświeższy raport techniczny (ostatnia data cen: 2026-02-06).</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">Bullish</div><div class="value">7</div></div>
+        <div class="stat-card"><div class="label">Neutral</div><div class="value">46</div></div>
+        <div class="stat-card"><div class="label">Bearish</div><div class="value">10</div></div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3>Najmocniejsze sygnały</h3>
+          <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>11B</td><td>50.0</td><td>Bullish</td><td>134.00</td><td>2026-02-06</td><td>22.16</td><td>16.35</td></tr><tr><td>DNP</td><td>50.0</td><td>Bullish</td><td>39.19</td><td>2026-02-06</td><td>52.16</td><td>30.17</td></tr><tr><td>PLW</td><td>50.0</td><td>Bullish</td><td>254.00</td><td>2026-02-06</td><td>19.52</td><td>15.71</td></tr><tr><td>TXT</td><td>37.5</td><td>Bullish</td><td>39.16</td><td>2026-02-06</td><td>26.45</td><td>36.55</td></tr><tr><td>GPP</td><td>37.5</td><td>Bullish</td><td>43.75</td><td>2026-02-06</td><td>15.26</td><td>1.92</td></tr><tr><td>CBF</td><td>37.5</td><td>Bullish</td><td>195.40</td><td>2026-02-06</td><td>23.13</td><td>27.67</td></tr><tr><td>ALE</td><td>37.5</td><td>Bullish</td><td>28.68</td><td>2026-02-06</td><td>26.95</td><td>18.73</td></tr><tr><td>CDR</td><td>25.0</td><td>Neutral</td><td>240.00</td><td>2026-02-06</td><td>28.79</td><td>33.68</td></tr><tr><td>DIA</td><td>25.0</td><td>Neutral</td><td>180.65</td><td>2026-02-06</td><td>27.00</td><td>33.34</td></tr><tr><td>ACP</td><td>25.0</td><td>Neutral</td><td>189.50</td><td>2026-02-06</td><td>20.44</td><td>35.86</td></tr></tbody></table></div>
+        </div>
+        <div>
+          <h3>Najsłabsze sygnały</h3>
+          <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>KTY</td><td>-62.5</td><td>Strong Bearish</td><td>1039.00</td><td>2026-02-06</td><td>64.51</td><td>61.31</td></tr><tr><td>PZU</td><td>-62.5</td><td>Strong Bearish</td><td>71.42</td><td>2026-02-06</td><td>61.61</td><td>60.09</td></tr><tr><td>LPP</td><td>-50.0</td><td>Bearish</td><td>20590.00</td><td>2026-02-06</td><td>62.96</td><td>57.79</td></tr><tr><td>OPL</td><td>-37.5</td><td>Bearish</td><td>11.73</td><td>2026-02-06</td><td>79.56</td><td>92.18</td></tr><tr><td>SNT</td><td>-37.5</td><td>Bearish</td><td>299.00</td><td>2026-02-06</td><td>58.27</td><td>56.61</td></tr><tr><td>ING</td><td>-37.5</td><td>Bearish</td><td>413.00</td><td>2026-02-06</td><td>87.22</td><td>87.00</td></tr><tr><td>ASB</td><td>-37.5</td><td>Bearish</td><td>37.30</td><td>2026-02-06</td><td>53.95</td><td>58.90</td></tr><tr><td>KRU</td><td>-37.5</td><td>Bearish</td><td>487.80</td><td>2026-02-06</td><td>55.60</td><td>46.30</td></tr><tr><td>DVL</td><td>-37.5</td><td>Bearish</td><td>9.77</td><td>2026-02-06</td><td>72.62</td><td>80.20</td></tr><tr><td>BDX</td><td>-37.5</td><td>Bearish</td><td>697.80</td><td>2026-02-06</td><td>54.77</td><td>58.85</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <h3>Pełna lista</h3>
+        <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>11B</td><td>50.0</td><td>Bullish</td><td>134.00</td><td>2026-02-06</td><td>22.16</td><td>16.35</td></tr><tr><td>DNP</td><td>50.0</td><td>Bullish</td><td>39.19</td><td>2026-02-06</td><td>52.16</td><td>30.17</td></tr><tr><td>PLW</td><td>50.0</td><td>Bullish</td><td>254.00</td><td>2026-02-06</td><td>19.52</td><td>15.71</td></tr><tr><td>TXT</td><td>37.5</td><td>Bullish</td><td>39.16</td><td>2026-02-06</td><td>26.45</td><td>36.55</td></tr><tr><td>GPP</td><td>37.5</td><td>Bullish</td><td>43.75</td><td>2026-02-06</td><td>15.26</td><td>1.92</td></tr><tr><td>CBF</td><td>37.5</td><td>Bullish</td><td>195.40</td><td>2026-02-06</td><td>23.13</td><td>27.67</td></tr><tr><td>ALE</td><td>37.5</td><td>Bullish</td><td>28.68</td><td>2026-02-06</td><td>26.95</td><td>18.73</td></tr><tr><td>CDR</td><td>25.0</td><td>Neutral</td><td>240.00</td><td>2026-02-06</td><td>28.79</td><td>33.68</td></tr><tr><td>DIA</td><td>25.0</td><td>Neutral</td><td>180.65</td><td>2026-02-06</td><td>27.00</td><td>33.34</td></tr><tr><td>ACP</td><td>25.0</td><td>Neutral</td><td>189.50</td><td>2026-02-06</td><td>20.44</td><td>35.86</td></tr><tr><td>PEP</td><td>25.0</td><td>Neutral</td><td>53.00</td><td>2026-02-06</td><td>27.33</td><td>35.77</td></tr><tr><td>ASE</td><td>25.0</td><td>Neutral</td><td>66.20</td><td>2026-02-06</td><td>27.30</td><td>43.33</td></tr><tr><td>HUG</td><td>12.5</td><td>Neutral</td><td>24.25</td><td>2026-02-06</td><td>50.67</td><td>59.27</td></tr><tr><td>MRB</td><td>12.5</td><td>Neutral</td><td>13.01</td><td>2026-02-06</td><td>37.79</td><td>23.71</td></tr><tr><td>NEU</td><td>12.5</td><td>Neutral</td><td>774.00</td><td>2026-02-06</td><td>32.17</td><td>38.23</td></tr><tr><td>LBW</td><td>12.5</td><td>Neutral</td><td>8.50</td><td>2026-02-06</td><td>52.70</td><td>53.33</td></tr><tr><td>CCC</td><td>12.5</td><td>Neutral</td><td>117.45</td><td>2026-02-06</td><td>41.21</td><td>17.74</td></tr><tr><td>EUR</td><td>12.5</td><td>Neutral</td><td>6.37</td><td>2026-02-06</td><td>32.48</td><td>25.11</td></tr><tr><td>WPL</td><td>12.5</td><td>Neutral</td><td>58.50</td><td>2026-02-06</td><td>31.85</td><td>30.28</td></tr><tr><td>GPW</td><td>12.5</td><td>Neutral</td><td>71.50</td><td>2026-02-06</td><td>56.65</td><td>45.45</td></tr><tr><td>MBK</td><td>12.5</td><td>Neutral</td><td>1064.00</td><td>2026-02-06</td><td>58.83</td><td>54.42</td></tr><tr><td>VRG</td><td>12.5</td><td>Neutral</td><td>5.10</td><td>2026-02-06</td><td>52.15</td><td>45.52</td></tr><tr><td>EAT</td><td>12.5</td><td>Neutral</td><td>13.40</td><td>2026-02-06</td><td>38.00</td><td>21.49</td></tr><tr><td>VOX</td><td>0.0</td><td>Neutral</td><td>137.20</td><td>2026-02-06</td><td>48.19</td><td>30.30</td></tr><tr><td>MBR</td><td>0.0</td><td>Neutral</td><td>362.00</td><td>2026-02-06</td><td>50.04</td><td>28.80</td></tr><tr><td>PGE</td><td>0.0</td><td>Neutral</td><td>9.85</td><td>2026-02-06</td><td>59.48</td><td>78.20</td></tr><tr><td>RBW</td><td>0.0</td><td>Neutral</td><td>157.50</td><td>2026-02-06</td><td>62.95</td><td>58.14</td></tr><tr><td>SPL</td><td>0.0</td><td>Neutral</td><td>580.00</td><td>2026-02-06</td><td>56.46</td><td>71.07</td></tr><tr><td>PCO</td><td>0.0</td><td>Neutral</td><td>27.69</td><td>2026-02-06</td><td>25.30</td><td>60.74</td></tr><tr><td>ZAB</td><td>0.0</td><td>Neutral</td><td>21.60</td><td>2026-02-06</td><td>38.70</td><td>52.25</td></tr><tr><td>ATT</td><td>0.0</td><td>Neutral</td><td>17.32</td><td>2026-02-06</td><td>40.43</td><td>30.32</td></tr><tr><td>ENA</td><td>0.0</td><td>Neutral</td><td>22.06</td><td>2026-02-06</td><td>61.80</td><td>58.11</td></tr><tr><td>DOM</td><td>0.0</td><td>Neutral</td><td>270.00</td><td>2026-02-06</td><td>60.80</td><td>45.32</td></tr><tr><td>CAR</td><td>0.0</td><td>Neutral</td><td>603.00</td><td>2026-02-06</td><td>38.22</td><td>54.46</td></tr><tr><td>JSW</td><td>-12.5</td><td>Neutral</td><td>25.62</td><td>2026-02-06</td><td>44.06</td><td>56.36</td></tr><tr><td>PEO</td><td>-12.5</td><td>Neutral</td><td>230.20</td><td>2026-02-06</td><td>67.90</td><td>70.70</td></tr><tr><td>APR</td><td>-12.5</td><td>Neutral</td><td>17.50</td><td>2026-02-06</td><td>43.17</td><td>50.74</td></tr><tr><td>VRC</td><td>-12.5</td><td>Neutral</td><td>135.00</td><td>2026-02-06</td><td>41.97</td><td>46.30</td></tr><tr><td>BFT</td><td>-12.5</td><td>Neutral</td><td>3800.00</td><td>2026-02-06</td><td>47.59</td><td>41.57</td></tr><tr><td>BHW</td><td>-12.5</td><td>Neutral</td><td>117.60</td><td>2026-02-06</td><td>66.10</td><td>62.52</td></tr><tr><td>PKO</td><td>-12.5</td><td>Neutral</td><td>93.16</td><td>2026-02-06</td><td>56.39</td><td>81.19</td></tr><tr><td>PKN</td><td>-12.5</td><td>Neutral</td><td>110.74</td><td>2026-02-06</td><td>67.29</td><td>65.44</td></tr><tr><td>ABE</td><td>-12.5</td><td>Neutral</td><td>127.20</td><td>2026-02-06</td><td>67.04</td><td>70.67</td></tr><tr><td>KGH</td><td>-12.5</td><td>Neutral</td><td>311.00</td><td>2026-02-06</td><td>43.49</td><td>48.37</td></tr><tr><td>CPS</td><td>-12.5</td><td>Neutral</td><td>12.96</td><td>2026-02-06</td><td>45.12</td><td>47.73</td></tr><tr><td>NWG</td><td>-12.5</td><td>Neutral</td><td>123.00</td><td>2026-02-06</td><td>61.41</td><td>69.15</td></tr><tr><td>MIL</td><td>-12.5</td><td>Neutral</td><td>17.78</td><td>2026-02-06</td><td>60.09</td><td>64.51</td></tr><tr><td>GRX</td><td>-12.5</td><td>Neutral</td><td>2.43</td><td>2026-02-06</td><td>48.50</td><td>59.64</td></tr><tr><td>TEN</td><td>-25.0</td><td>Neutral</td><td>105.60</td><td>2026-02-06</td><td>43.85</td><td>63.97</td></tr><tr><td>XTB</td><td>-25.0</td><td>Neutral</td><td>86.26</td><td>2026-02-06</td><td>74.12</td><td>64.79</td></tr><tr><td>ALR</td><td>-25.0</td><td>Neutral</td><td>123.45</td><td>2026-02-06</td><td>67.54</td><td>84.69</td></tr><tr><td>TPE</td><td>-25.0</td><td>Neutral</td><td>11.29</td><td>2026-02-06</td><td>73.59</td><td>78.84</td></tr><tr><td>BNP</td><td>-25.0</td><td>Neutral</td><td>149.50</td><td>2026-02-06</td><td>69.36</td><td>89.51</td></tr><tr><td>OPL</td><td>-37.5</td><td>Bearish</td><td>11.73</td><td>2026-02-06</td><td>79.56</td><td>92.18</td></tr><tr><td>SNT</td><td>-37.5</td><td>Bearish</td><td>299.00</td><td>2026-02-06</td><td>58.27</td><td>56.61</td></tr><tr><td>ING</td><td>-37.5</td><td>Bearish</td><td>413.00</td><td>2026-02-06</td><td>87.22</td><td>87.00</td></tr><tr><td>ASB</td><td>-37.5</td><td>Bearish</td><td>37.30</td><td>2026-02-06</td><td>53.95</td><td>58.90</td></tr><tr><td>KRU</td><td>-37.5</td><td>Bearish</td><td>487.80</td><td>2026-02-06</td><td>55.60</td><td>46.30</td></tr><tr><td>DVL</td><td>-37.5</td><td>Bearish</td><td>9.77</td><td>2026-02-06</td><td>72.62</td><td>80.20</td></tr><tr><td>BDX</td><td>-37.5</td><td>Bearish</td><td>697.80</td><td>2026-02-06</td><td>54.77</td><td>58.85</td></tr><tr><td>LPP</td><td>-50.0</td><td>Bearish</td><td>20590.00</td><td>2026-02-06</td><td>62.96</td><td>57.79</td></tr><tr><td>KTY</td><td>-62.5</td><td>Strong Bearish</td><td>1039.00</td><td>2026-02-06</td><td>64.51</td><td>61.31</td></tr><tr><td>PZU</td><td>-62.5</td><td>Strong Bearish</td><td>71.42</td><td>2026-02-06</td><td>61.61</td><td>60.09</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="tech-global" class="reveal">
+      <h2>Techniczne: Rynki Globalne</h2>
+      <p>Raport globalny (ostatnia data cen: 2026-02-06).</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">Bullish</div><div class="value">1</div></div>
+        <div class="stat-card"><div class="label">Neutral</div><div class="value">22</div></div>
+        <div class="stat-card"><div class="label">Bearish</div><div class="value">12</div></div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3>Najmocniejsze sygnały</h3>
+          <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>AMZN</td><td>37.5</td><td>Bullish</td><td>210.32</td><td>2026-02-06</td><td>17.97</td><td>28.48</td></tr><tr><td>MSFT</td><td>25.0</td><td>Neutral</td><td>401.14</td><td>2026-02-06</td><td>26.60</td><td>38.92</td></tr><tr><td>CRM</td><td>25.0</td><td>Neutral</td><td>191.35</td><td>2026-02-06</td><td>17.24</td><td>21.07</td></tr><tr><td>V</td><td>12.5</td><td>Neutral</td><td>331.58</td><td>2026-02-06</td><td>52.36</td><td>58.94</td></tr><tr><td>UNH</td><td>12.5</td><td>Neutral</td><td>276.65</td><td>2026-02-06</td><td>30.13</td><td>39.08</td></tr><tr><td>META</td><td>12.5</td><td>Neutral</td><td>661.46</td><td>2026-02-06</td><td>44.09</td><td>51.78</td></tr><tr><td>MA</td><td>12.5</td><td>Neutral</td><td>548.74</td><td>2026-02-06</td><td>54.37</td><td>53.28</td></tr><tr><td>DOW</td><td>0.0</td><td>Neutral</td><td>31.78</td><td>2026-02-06</td><td>69.74</td><td>55.14</td></tr><tr><td>GOOGL</td><td>0.0</td><td>Neutral</td><td>322.86</td><td>2026-02-06</td><td>32.60</td><td>55.41</td></tr><tr><td>GS</td><td>-12.5</td><td>Neutral</td><td>928.75</td><td>2026-02-06</td><td>49.99</td><td>51.59</td></tr></tbody></table></div>
+        </div>
+        <div>
+          <h3>Najsłabsze sygnały</h3>
+          <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>KO</td><td>-50.0</td><td>Bearish</td><td>79.03</td><td>2026-02-06</td><td>90.43</td><td>94.88</td></tr><tr><td>MCD</td><td>-50.0</td><td>Bearish</td><td>327.16</td><td>2026-02-06</td><td>84.49</td><td>86.75</td></tr><tr><td>HD</td><td>-50.0</td><td>Bearish</td><td>385.15</td><td>2026-02-06</td><td>61.35</td><td>56.06</td></tr><tr><td>BA</td><td>-50.0</td><td>Bearish</td><td>243.03</td><td>2026-02-06</td><td>62.49</td><td>50.63</td></tr><tr><td>AMGN</td><td>-37.5</td><td>Bearish</td><td>384.32</td><td>2026-02-06</td><td>82.58</td><td>64.17</td></tr><tr><td>MRK</td><td>-37.5</td><td>Bearish</td><td>121.93</td><td>2026-02-06</td><td>86.25</td><td>75.90</td></tr><tr><td>NVDA</td><td>-37.5</td><td>Bearish</td><td>185.41</td><td>2026-02-06</td><td>53.25</td><td>48.38</td></tr><tr><td>PG</td><td>-37.5</td><td>Bearish</td><td>159.17</td><td>2026-02-06</td><td>85.52</td><td>82.99</td></tr><tr><td>TRV</td><td>-37.5</td><td>Bearish</td><td>301.49</td><td>2026-02-06</td><td>88.39</td><td>71.43</td></tr><tr><td>AXP</td><td>-37.5</td><td>Bearish</td><td>359.15</td><td>2026-02-06</td><td>52.80</td><td>57.75</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <h3>Pełna lista</h3>
+        <div class="table-wrap"><table><thead><tr><th>ticker</th><th>combined_score</th><th>sentiment</th><th>last_close</th><th>last_date</th><th>rsi_value</th><th>mfi_value</th></tr></thead><tbody><tr><td>AMZN</td><td>37.5</td><td>Bullish</td><td>210.32</td><td>2026-02-06</td><td>17.97</td><td>28.48</td></tr><tr><td>MSFT</td><td>25.0</td><td>Neutral</td><td>401.14</td><td>2026-02-06</td><td>26.60</td><td>38.92</td></tr><tr><td>CRM</td><td>25.0</td><td>Neutral</td><td>191.35</td><td>2026-02-06</td><td>17.24</td><td>21.07</td></tr><tr><td>V</td><td>12.5</td><td>Neutral</td><td>331.58</td><td>2026-02-06</td><td>52.36</td><td>58.94</td></tr><tr><td>UNH</td><td>12.5</td><td>Neutral</td><td>276.65</td><td>2026-02-06</td><td>30.13</td><td>39.08</td></tr><tr><td>META</td><td>12.5</td><td>Neutral</td><td>661.46</td><td>2026-02-06</td><td>44.09</td><td>51.78</td></tr><tr><td>MA</td><td>12.5</td><td>Neutral</td><td>548.74</td><td>2026-02-06</td><td>54.37</td><td>53.28</td></tr><tr><td>DOW</td><td>0.0</td><td>Neutral</td><td>31.78</td><td>2026-02-06</td><td>69.74</td><td>55.14</td></tr><tr><td>GOOGL</td><td>0.0</td><td>Neutral</td><td>322.86</td><td>2026-02-06</td><td>32.60</td><td>55.41</td></tr><tr><td>GS</td><td>-12.5</td><td>Neutral</td><td>928.75</td><td>2026-02-06</td><td>49.99</td><td>51.59</td></tr><tr><td>IBM</td><td>-12.5</td><td>Neutral</td><td>298.93</td><td>2026-02-06</td><td>50.71</td><td>44.69</td></tr><tr><td>HON</td><td>-12.5</td><td>Neutral</td><td>238.38</td><td>2026-02-06</td><td>80.83</td><td>57.79</td></tr><tr><td>MMM</td><td>-12.5</td><td>Neutral</td><td>172.65</td><td>2026-02-06</td><td>75.09</td><td>42.25</td></tr><tr><td>JPM</td><td>-12.5</td><td>Neutral</td><td>322.40</td><td>2026-02-06</td><td>67.19</td><td>71.68</td></tr><tr><td>DIS</td><td>-12.5</td><td>Neutral</td><td>108.70</td><td>2026-02-06</td><td>49.12</td><td>45.46</td></tr><tr><td>NKE</td><td>-12.5</td><td>Neutral</td><td>63.92</td><td>2026-02-06</td><td>53.93</td><td>44.31</td></tr><tr><td>TSLA</td><td>-12.5</td><td>Neutral</td><td>411.11</td><td>2026-02-06</td><td>40.74</td><td>51.58</td></tr><tr><td>BRK-B</td><td>-12.5</td><td>Neutral</td><td>508.09</td><td>2026-02-06</td><td>77.42</td><td>53.41</td></tr><tr><td>AAPL</td><td>-25.0</td><td>Neutral</td><td>278.12</td><td>2026-02-06</td><td>80.76</td><td>75.64</td></tr><tr><td>JNJ</td><td>-25.0</td><td>Neutral</td><td>239.99</td><td>2026-02-06</td><td>94.31</td><td>72.02</td></tr><tr><td>CVX</td><td>-25.0</td><td>Neutral</td><td>180.86</td><td>2026-02-06</td><td>75.66</td><td>74.76</td></tr><tr><td>CSCO</td><td>-25.0</td><td>Neutral</td><td>84.82</td><td>2026-02-06</td><td>77.96</td><td>52.44</td></tr><tr><td>CAT</td><td>-25.0</td><td>Neutral</td><td>726.20</td><td>2026-02-06</td><td>74.58</td><td>54.28</td></tr><tr><td>AMGN</td><td>-37.5</td><td>Bearish</td><td>384.32</td><td>2026-02-06</td><td>82.58</td><td>64.17</td></tr><tr><td>MRK</td><td>-37.5</td><td>Bearish</td><td>121.93</td><td>2026-02-06</td><td>86.25</td><td>75.90</td></tr><tr><td>NVDA</td><td>-37.5</td><td>Bearish</td><td>185.41</td><td>2026-02-06</td><td>53.25</td><td>48.38</td></tr><tr><td>PG</td><td>-37.5</td><td>Bearish</td><td>159.17</td><td>2026-02-06</td><td>85.52</td><td>82.99</td></tr><tr><td>TRV</td><td>-37.5</td><td>Bearish</td><td>301.49</td><td>2026-02-06</td><td>88.39</td><td>71.43</td></tr><tr><td>AXP</td><td>-37.5</td><td>Bearish</td><td>359.15</td><td>2026-02-06</td><td>52.80</td><td>57.75</td></tr><tr><td>VZ</td><td>-37.5</td><td>Bearish</td><td>46.31</td><td>2026-02-06</td><td>80.19</td><td>81.93</td></tr><tr><td>WMT</td><td>-37.5</td><td>Bearish</td><td>131.18</td><td>2026-02-06</td><td>84.74</td><td>60.12</td></tr><tr><td>KO</td><td>-50.0</td><td>Bearish</td><td>79.03</td><td>2026-02-06</td><td>90.43</td><td>94.88</td></tr><tr><td>MCD</td><td>-50.0</td><td>Bearish</td><td>327.16</td><td>2026-02-06</td><td>84.49</td><td>86.75</td></tr><tr><td>HD</td><td>-50.0</td><td>Bearish</td><td>385.15</td><td>2026-02-06</td><td>61.35</td><td>56.06</td></tr><tr><td>BA</td><td>-50.0</td><td>Bearish</td><td>243.03</td><td>2026-02-06</td><td>62.49</td><td>50.63</td></tr></tbody></table></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Źródła: /Users/bombowybob/bankier_scraper/Reports/Sentiment/sentiment_report_20260209_192245.txt, /Users/bombowybob/bankier_scraper/Reports/Technical/techincals_report_20260209_132440.csv, /Users/bombowybob/bankier_scraper/Reports/Technical/techincals_zagr_report_20260209_132940.csv.</p>
+  </footer>
+
+  <script>
+    const sentimentTimeline = [{"date": "2026-01-27 14:11", "bullish": 4, "bearish": 4, "neutral": 9}, {"date": "2026-01-27 14:38", "bullish": 10, "bearish": 8, "neutral": 13}, {"date": "2026-01-27 16:45", "bullish": 10, "bearish": 6, "neutral": 15}, {"date": "2026-02-02 12:57", "bullish": 11, "bearish": 7, "neutral": 12}, {"date": "2026-02-02 17:08", "bullish": 12, "bearish": 8, "neutral": 10}, {"date": "2026-02-02 18:03", "bullish": 27, "bearish": 15, "neutral": 13}, {"date": "2026-02-03 13:49", "bullish": 2, "bearish": 0, "neutral": 0}, {"date": "2026-02-03 14:30", "bullish": 27, "bearish": 6, "neutral": 19}, {"date": "2026-02-04 09:53", "bullish": 8, "bearish": 5, "neutral": 3}, {"date": "2026-02-04 10:01", "bullish": 9, "bearish": 2, "neutral": 51}, {"date": "2026-02-04 10:20", "bullish": 4, "bearish": 3, "neutral": 55}, {"date": "2026-02-05 10:39", "bullish": 4, "bearish": 0, "neutral": 58}, {"date": "2026-02-09 19:22", "bullish": 2, "bearish": 3, "neutral": 57}];
+    const chartEmpty = document.getElementById('chartEmpty');
+    const chartCanvas = document.getElementById('sentimentChart');
+
+    function drawSentimentChart(data) {
+      if (!chartCanvas) return;
+      const ctx = chartCanvas.getContext('2d');
+      if (!ctx || data.length < 2) {
+        chartEmpty.style.display = 'block';
+        return;
+      }
+      chartEmpty.style.display = 'none';
+
+      const dpr = window.devicePixelRatio || 1;
+      const width = chartCanvas.clientWidth;
+      const height = chartCanvas.clientHeight || 220;
+      chartCanvas.width = width * dpr;
+      chartCanvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const padding = { left: 36, right: 16, top: 16, bottom: 28 };
+      const innerWidth = width - padding.left - padding.right;
+      const innerHeight = height - padding.top - padding.bottom;
+
+      const maxVal = Math.max(
+        ...data.map(row => Math.max(row.bullish, row.bearish, row.neutral, 1))
+      );
+
+      const xStep = innerWidth / (data.length - 1);
+      const scaleY = val => padding.top + innerHeight * (1 - val / maxVal);
+      const scaleX = idx => padding.left + idx * xStep;
+
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.lineWidth = 1;
+      const gridLines = 4;
+      for (let i = 0; i <= gridLines; i++) {
+        const y = padding.top + (innerHeight / gridLines) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+      }
+
+      function drawLine(key, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        data.forEach((row, idx) => {
+          const x = scaleX(idx);
+          const y = scaleY(row[key]);
+          if (idx === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        data.forEach((row, idx) => {
+          const x = scaleX(idx);
+          const y = scaleY(row[key]);
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      drawLine('bullish', '#22c55e');
+      drawLine('bearish', '#ef4444');
+      drawLine('neutral', '#f59e0b');
+
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.7)';
+      ctx.font = '10px "Space Mono", monospace';
+      ctx.textAlign = 'center';
+      const lastIdx = data.length - 1;
+      ctx.fillText(data[0].date, scaleX(0), height - 10);
+      if (lastIdx > 0) {
+        ctx.fillText(data[lastIdx].date, scaleX(lastIdx), height - 10);
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    drawSentimentChart(sentimentTimeline);
+    window.addEventListener('resize', () => drawSentimentChart(sentimentTimeline));
+  </script>
+</body>
+</html>
