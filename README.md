@@ -2,3 +2,4 @@
 # bankier_scraper
 # Strona_test
 # Svetrowo
+# Svetrovo
