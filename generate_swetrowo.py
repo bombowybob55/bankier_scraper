@@ -1334,7 +1334,7 @@ def build_html(
   </main>
 
   <footer>
-    <p>Źródła: {esc(str(sentiment_report_path) if sentiment_report_path else '-')}, {esc(str(tech_pl_report_path) if tech_pl_report_path else '-')}, {esc(str(tech_zagr_report_path) if tech_zagr_report_path else '-')}.</p>
+    <p>Źródła: {esc(sentiment_report_path.name if sentiment_report_path else '-')}, {esc(tech_pl_report_path.name if tech_pl_report_path else '-')}, {esc(tech_zagr_report_path.name if tech_zagr_report_path else '-')}.</p>
   </footer>
 
   <script>
